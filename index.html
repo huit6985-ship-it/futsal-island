@@ -906,15 +906,18 @@ function kick(pl, vel, kind='pass'){
   ball.hitPost = false;
   kickFlash = 0.08;
 }
+// human error: under pressure and over distance a pass drifts off line and over/under-hits
+function passErr(pl, d){ const pr = onPitch(1-pl.team).length ? minOppDist(pl) : 9; return (0.025 + (pr<1.4?0.09:pr<2.5?0.04:0) + d*0.003) * (Math.random()+Math.random()-1) * 2.2; }
+function wobble(dir, a){ const c=Math.cos(a), s=Math.sin(a); return V3(dir.x*c - dir.z*s, 0, dir.x*s + dir.z*c); }
 function groundPassTo(pl, target, arrive=3){
-  const d = hd(pl.p, target); const v0 = solveRoll(d, arrive);
-  const dir = V3(target.x-ball.p.x,0,target.z-ball.p.z).normalize();
+  const d = hd(pl.p, target); const v0 = solveRoll(d, arrive) * (1 + passErr(pl,d)*0.8);
+  const dir = wobble(V3(target.x-ball.p.x,0,target.z-ball.p.z).normalize(), passErr(pl,d));
   kick(pl, dir.multiplyScalar(v0), 'pass');
   return rollTime(d, v0);
 }
 function lobTo(pl, target, th=0.6){
-  const d = hd(pl.p, target); const v0 = solveLob(d, th);
-  const dir = V3(target.x-ball.p.x,0,target.z-ball.p.z).normalize();
+  const d = hd(pl.p, target); const v0 = solveLob(d, th) * (1 + passErr(pl,d)*0.6);
+  const dir = wobble(V3(target.x-ball.p.x,0,target.z-ball.p.z).normalize(), passErr(pl,d)*1.2);
   kick(pl, V3(dir.x*v0*Math.cos(th), v0*Math.sin(th), dir.z*v0*Math.cos(th)), 'pass');
 }
 function shoot(pl, power=null){
@@ -990,6 +993,11 @@ function decideCarrier(pl, dt){
     lobTo(pl, t, rr(0.5,0.75)); if(mate) ball.pass={to:mate,t:2.5,spot:t}; say('pass',{p:pl}); return;
   }
   const pressure = minOppDist(pl);
+  if(pl.role!=='GK' && pressure<1.6 && al<15 && Math.random()<0.4){ // safety first: hack it over the touchline
+    const sx = pl.p.x>=0?1:-1; const byline = al<7 && Math.random()<0.5; // deep and pinned: shove it behind for a corner
+    const t = byline ? V3(sx*rr(3,9), 0, ownGoal(pl.team).z*1.2) : V3(sx*(PITCH.hx+3), 0, pl.p.z + S.dir[pl.team]*rr(1,6));
+    const dir = V3(t.x-ball.p.x,0,t.z-ball.p.z).normalize(); kick(pl, V3(dir.x*rr(9,13), rr(0,2.5), dir.z*rr(9,13)), 'pass'); return;
+  }
   const r = bestReceiver(pl);
   const wantPass = pressure < 2.2 ? 0.85 : pl.hold > 2.2 ? 0.7 : 0.35;
   if(r && r.open > 0.9 && Math.random() < wantPass){
@@ -1080,7 +1088,7 @@ function updatePlay(dt){
           pl.tackleCool = 0.9;
           const r = Math.random();
           if(r<0.08){ foul(pl, owner); return; }
-          else if(r<0.62){ ball.owner=null; ball.v.set(rr(-3,3),0,rr(-3,3)); ball.lastTouch=t; owner.cool=0.5; }
+          else if(r<0.62){ ball.owner=null; { const a=rr(0,Math.PI*2), sp=rr(3,8); ball.v.set(Math.sin(a)*sp,0,Math.cos(a)*sp); } ball.lastTouch=t; owner.cool=0.5; }
         }
       }
     }
@@ -1094,7 +1102,8 @@ function updatePlay(dt){
   } else {
     // pickups
     let cand=null, cd=1e9;
-    for(const pl of [...onPitch(0),...onPitch(1)]){
+    const outside = Math.abs(ball.p.x) > PITCH.hx + BALL_R || Math.abs(ball.p.z) > PITCH.hz + BALL_R;
+    for(const pl of outside ? [] : [...onPitch(0),...onPitch(1)]){
       if(pl.cool>0) continue;
       const d = hd(pl.p, ball.p);
       const reach = pl.role==='GK' && inOwnArea(pl) ? 1.0 : 0.6;
@@ -1108,7 +1117,7 @@ function updatePlay(dt){
         const wasShot = ball.shot; gainBall(cand);
         if(cand.role==='GK' && inOwnArea(cand) && ball.lastKicker && ball.lastKicker.team!==cand.team){ ball.held = true; }
         ball.shot = null;
-      } else { ball.v.multiplyScalar(0.55); ball.v.x += rr(-2,2); ball.v.z += rr(-2,2); cand.cool=0.3; ball.lastTouch=cand.team; }
+      } else { const blk = ball.shot && ball.shot.team!==cand.team; ball.v.multiplyScalar(blk?0.7:0.55); ball.v.x += blk ? (Math.random()<0.5?-1:1)*rr(3,7) : rr(-2,2); ball.v.z += rr(-2,2); cand.cool=0.3; ball.lastTouch=cand.team; } // blocked shots deflect wide
     }
   }
   resolveShot();
@@ -1129,7 +1138,7 @@ function resolveShot(){
     if(Math.random() < p){
       say('save',{p:gk}); gk.dive = 0.5*Math.sign(ball.p.x-gk.p.x||1);
       if(sp < 17 && ball.p.y < 1.5){ gk.cool=0; gainBall(gk); ball.held=true; }
-      else { ball.v.set(Math.sign(ball.p.x-gk.p.x||1)*rr(3,7), rr(1,3), -Math.sign(gz)*rr(1,4) + Math.sign(gz)*rr(0,6)); ball.lastTouch = t; ball.shot=null; }
+      else { const behind = Math.random()<0.5; ball.v.set(Math.sign(ball.p.x-gk.p.x||1)*rr(3,7), rr(1,3), behind ? Math.sign(gz)*rr(2,5) : -Math.sign(gz)*rr(1,5)); ball.lastTouch = t; ball.shot=null; } // half the parries are tipped round for a corner
     }
   }
 }
@@ -1186,8 +1195,13 @@ function updateRestart(dt){
 }
 
 function checkOut(){
-  if(ball.owner || S.phase!=='play') return;
+  if(S.phase!=='play' || ball.held) return;
   const p = ball.p;
+  if(ball.owner){
+    if(Math.abs(p.x) <= PITCH.hx + BALL_R && Math.abs(p.z) <= PITCH.hz + BALL_R) return;
+    if(Math.abs(p.z) > PITCH.hz && Math.abs(p.x) < 1.5) return; // carried into the goal mouth: ignore
+    ball.lastTouch = ball.owner.team; ball.owner.cool = 0.5; ball.owner = null;
+  }
   // goal?
   for(const s of [-1,1]){
     if(s*p.z > PITCH.hz + BALL_R && Math.abs(p.x) < 1.5 - BALL_R*0.5 && p.y < 2 - BALL_R*0.5){
