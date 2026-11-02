@@ -294,6 +294,7 @@ postScene.add(new THREE.Mesh(new THREE.PlaneGeometry(2,2), post));
 function setPalette(time, teams){
   const list = PALETTES[time].slice();
   const add = h => { const c = col(h); list.push('#'+c.getHexString()); const d=c.clone().multiplyScalar(time==='night'?0.45:0.62); list.push('#'+d.getHexString()); };
+  if(typeof S!=='undefined' && S.surface==='parquet'){ const k = time==='night'?0.5:time==='dusk'?0.8:1; for(const h of ['#cc9a68','#c8955f','#b8834f','#e2b98a']){ const c=col(h).multiplyScalar(k); list.push('#'+c.getHexString()); } }
   for(const t of teams){ add(t.shirt); add(t.shorts); add(t.gk); }
   const arr = post.uniforms.pal.value;
   list.slice(0,MAXPAL).forEach((h,i)=>{ const c = new THREE.Color(); c.setStyle(h, THREE.SRGBColorSpace); const s = c.clone(); // keep sRGB numbers
@@ -398,7 +399,7 @@ function drawPitch(kind){
     if(kind==='turf'){ for(let x=0;x<w;x+=PX*2.5){ g.fillStyle=(x/(PX*2.5))%2<1?'#388e5a':'#205c3b'; g.fillRect(x,0,PX*2.5,h);} 
       for(let i=0;i<40;i++){ g.fillStyle='#79823b'; g.globalAlpha=.5; g.beginPath(); g.ellipse(Math.random()*w,Math.random()*h,rr(8,26),rr(6,18),0,0,7); g.fill(); } g.globalAlpha=1; }
     if(kind==='parquet'){ const bw=PX*0.5, bl=PX*2;
-      for(let y=0;y<h;y+=bw) for(let x=-(y/bw%2)*bl/2;x<w;x+=bl){ g.fillStyle=pick(['#d4a373','#c57e50','#a26d3f','#d9ad7c']); g.fillRect(x,y,bl-1,bw-1); }
+      for(let y=0;y<h;y+=bw) for(let x=-(y/bw%2)*bl/2;x<w;x+=bl){ g.fillStyle=pick(['#d4a373','#cc9a68','#c8955f','#d9ad7c']); g.fillRect(x,y,bl-1,bw-1); }
       g.fillStyle='#9c683b'; g.globalAlpha=.5; g.fillRect(0,0,w,1.5*PX); g.fillRect(0,h-1.5*PX,w,1.5*PX); g.globalAlpha=1; }
     // markings
     const lc = kind==='parquet' ? '#11141a' : '#f4f6f8';
@@ -439,8 +440,8 @@ box(2, 0.08, 43, '#c8d1d3', 12.5, 0.04, 0, scene, false);
 // --- 5c goals ---
 const goalTexPost = canvasTex(8,64,(g)=>{ for(let i=0;i<8;i++){ g.fillStyle=i%2?'#f4f6f8':'#b71c1c'; g.fillRect(0,i*8,8,8);} },{nearest:true});
 const goalTexBar = canvasTex(64,8,(g)=>{ for(let i=0;i<12;i++){ g.fillStyle=i%2?'#f4f6f8':'#b71c1c'; g.fillRect(i*64/12,0,64/12+1,8);} },{nearest:true});
-const netTex = canvasTex(32,32,(g)=>{ g.strokeStyle='#f4f6f8'; g.lineWidth=2; for(let i=0;i<=32;i+=8){ g.beginPath(); g.moveTo(i,0); g.lineTo(i,32); g.stroke(); g.beginPath(); g.moveTo(0,i); g.lineTo(32,i); g.stroke(); } },{nearest:true,repeat:[6,4]});
-const netMat = new THREE.MeshLambertMaterial({ map:netTex, transparent:true, alphaTest:.5, side:THREE.DoubleSide });
+const netTex = canvasTex(32,32,(g)=>{ g.strokeStyle='#9aa3ad'; g.lineWidth=1; for(let i=0.5;i<=32;i+=8){ g.beginPath(); g.moveTo(i,0); g.lineTo(i,32); g.stroke(); g.beginPath(); g.moveTo(0,i); g.lineTo(32,i); g.stroke(); } },{nearest:true,repeat:[6,4]});
+const netMat = new THREE.MeshLambertMaterial({ map:netTex, transparent:true, alphaTest:.35, opacity:.8, side:THREE.DoubleSide });
 function goal(s){
   const z = s*PITCH.hz, g = new THREE.Group(); scene.add(g);
   const pm = new THREE.MeshLambertMaterial({ map:goalTexPost }), bm = new THREE.MeshLambertMaterial({ map:goalTexBar });
@@ -1447,6 +1448,7 @@ function setSurface(k){
   if(!pitchTex[k]) pitchTex[k] = drawPitch(k);
   pitch.material.map = pitchTex[k]; pitch.material.needsUpdate = true;
   document.getElementById('surfNote').textContent = surf.note;
+  if(S.teams) setPalette(S.timeOfDay, S.teams);
 }
 
 /* =========================================================================
