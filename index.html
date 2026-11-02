@@ -747,6 +747,7 @@ function* all(gens){ const live=gens.slice(); while(live.length){ const dt=yield
 const ballMesh = new THREE.Mesh(new THREE.IcosahedronGeometry(BALL_R*1.6,0), M('#f4f6f8'));
 ballMesh.castShadow = true; scene.add(ballMesh);
 const ballDot = box(0.12,0.12,0.12,'#11141a',0,0,0,ballMesh,false); ballDot.position.set(0.1,0.1,0);
+const ballBlob = new THREE.Mesh(new THREE.CircleGeometry(BALL_R*2.2,12), new THREE.MeshBasicMaterial({color:0x000000,transparent:true,opacity:0.5,depthWrite:false})); ballBlob.rotation.x=-Math.PI/2; ballBlob.renderOrder=2; scene.add(ballBlob);
 const ball = { p:V3(0,BALL_R,0), v:V3(), owner:null, held:false, lastTouch:0, lastKicker:null, shot:null, frozen:false };
 let surf = SURFACES.rubber;
 
@@ -1087,7 +1088,7 @@ function updatePlay(dt){
         if(Math.random() < 0.8*dt){
           pl.tackleCool = 0.9;
           const r = Math.random();
-          if(r<0.08){ foul(pl, owner); return; }
+          if(r<0.05){ foul(pl, owner); return; }
           else if(r<0.62){ ball.owner=null; { const a=rr(0,Math.PI*2), sp=rr(3,8); ball.v.set(Math.sin(a)*sp,0,Math.cos(a)*sp); } ball.lastTouch=t; owner.cool=0.5; }
         }
       }
@@ -1590,6 +1591,7 @@ function tick(dt){
   }
   // ball
   ballMesh.position.copy(ball.p); ballMesh.position.y = Math.max(ball.p.y, BALL_R*1.2) + 0.03;
+  ballBlob.position.set(ball.p.x,0.1,ball.p.z); ballBlob.scale.setScalar(Math.max(0.5,1-ball.p.y*0.15));
   const bs = Math.hypot(ball.v.x, ball.v.z); ballMesh.rotation.x += ball.v.z*dt/BALL_R*0.5; ballMesh.rotation.z -= ball.v.x*dt/BALL_R*0.5;
   // crowd
   const C = world.crowd; C.excite = Math.max(0, C.excite - dt*0.6);
