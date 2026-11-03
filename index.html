@@ -1,28 +1,29 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Recess Futsal · School No. 12</title>
-<meta name="description" content="A pixel-art 3D diorama of a five-a-side match on a floating school playground.">
+<title>课间五人制 · 第十二小学</title>
+<meta name="description" content="像素风 3D 五人制足球：悬浮小岛上的学校操场比赛。">
 <style>
 :root{
   --paper:#f3efe6; --ink:#1c1a17; --ink-2:#4a453d; --ink-3:#6b6458; --rule:#d9d2c3;
   --accent:#c2411c; --panel:#fbf8f1; --led:#ffb000;
-  --serif: "Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
-  --mono: ui-monospace,"SF Mono","Cascadia Mono","Roboto Mono",Menlo,Consolas,monospace;
+  --serif: "Iowan Old Style","Songti SC","Noto Serif SC","Source Han Serif SC","SimSun","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+  --mono: ui-monospace,"SF Mono","Cascadia Mono","Roboto Mono",Menlo,Consolas,"PingFang SC","Microsoft YaHei","Noto Sans SC",monospace;
 }
 *{box-sizing:border-box}
-html,body{margin:0;background:var(--paper);color:var(--ink)}
+html,body{margin:0;background:var(--paper);color:var(--ink);height:100%;overflow:hidden}
 body{font:15px/1.45 var(--serif);-webkit-font-smoothing:antialiased}
-.wrap{max-width:1240px;margin:0 auto;padding:20px 20px 40px}
-header.mast{display:flex;align-items:baseline;justify-content:space-between;gap:16px;border-bottom:1.5px solid var(--ink);padding-bottom:10px;margin-bottom:16px;flex-wrap:wrap}
-header.mast h1{font-size:22px;letter-spacing:.01em;margin:0;font-weight:700}
+.wrap{height:100vh;height:100dvh;display:grid;grid-template-rows:auto minmax(0,1fr);gap:8px;padding:8px 10px 10px}
+header.mast{display:flex;align-items:baseline;justify-content:space-between;gap:16px;border-bottom:1.5px solid var(--ink);padding-bottom:6px;flex-wrap:wrap}
+header.mast h1{font-size:20px;letter-spacing:.01em;margin:0;font-weight:700}
 header.mast h1 span{font-weight:400;color:var(--ink-3)}
 header.mast p{margin:0;color:var(--ink-2);font-size:14px;font-style:italic}
-.grid{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:20px;align-items:start}
-.stage{position:relative;background:#11141a;border:1.5px solid var(--ink);overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none}
-.stage canvas{display:block;width:100%;height:auto;image-rendering:pixelated;image-rendering:crisp-edges;cursor:crosshair}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:10px;min-height:0}
+section.main{display:flex;flex-direction:column;min-height:0;min-width:0}
+.stage{flex:1;min-height:0;position:relative;background:#11141a;border:1.5px solid var(--ink);overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none}
+.stage canvas{display:block;width:100%;height:100%;image-rendering:pixelated;image-rendering:crisp-edges;cursor:crosshair}
 .bug{position:absolute;left:10px;top:10px;display:flex;align-items:stretch;font:600 13px/1 var(--mono);color:#fff;pointer-events:none}
 .bug div{padding:6px 8px;background:rgba(17,20,26,.82)}
 .bug .sc{background:#fff;color:#11141a;min-width:54px;text-align:center}
@@ -35,123 +36,145 @@ header.mast p{margin:0;color:var(--ink-2);font-size:14px;font-style:italic}
 .rot button:active,.shot button:active{transform:translateY(1px)}
 .toast{position:absolute;left:50%;top:12px;transform:translateX(-50%);font:600 12px/1 var(--mono);background:var(--led);color:#11141a;padding:6px 10px;opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap}
 .toast.on{opacity:1}
-.under{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:10px;flex-wrap:wrap}
+.under{position:absolute;left:10px;bottom:10px;right:110px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;pointer-events:none}
+.under > *{pointer-events:auto}
 .shot{display:flex;gap:6px;flex-wrap:wrap}
 .shot button.prim{background:var(--ink);color:var(--paper)}
-.hint{color:var(--ink-3);font-size:13px;font-style:italic;margin:0}
-aside.panel{background:var(--panel);border:1.5px solid var(--ink);padding:14px 14px 4px}
-.row{margin-bottom:14px}
-.row > label,.lab{display:block;font:600 11px/1 var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--ink-2);margin-bottom:7px}
+.hint{color:#fff;font-size:13px;margin:0;background:rgba(17,20,26,.6);padding:5px 8px}
+aside.panel{background:var(--panel);border:1.5px solid var(--ink);padding:12px 12px 8px;min-height:0;overflow:auto;display:flex;flex-direction:column}
+.row.grow{flex:1;min-height:140px;display:flex;flex-direction:column}
+.row{margin-bottom:12px}
+.row > label,.lab{display:block;font:600 11px/1 var(--mono);letter-spacing:.06em;color:var(--ink-2);margin-bottom:7px}
 .seg{display:flex;border:1.5px solid var(--ink)}
-.seg button{flex:1;font:500 13px/1 var(--mono);padding:9px 4px;border:0;border-right:1.5px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer;min-height:36px}
+.seg button{flex:1;min-width:0;white-space:nowrap;font:500 13px/1 var(--mono);padding:9px 4px;border:0;border-right:1.5px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer;min-height:36px}
 .seg button:last-child{border-right:0}
 .seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
 .seg button:focus-visible,.rot button:focus-visible,.shot button:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .sub{font-size:12.5px;color:var(--ink-3);margin-top:6px;font-style:italic;min-height:1em}
-select{width:100%;font:500 13px var(--mono);padding:8px;border:1.5px solid var(--ink);background:#fff;color:var(--ink);border-radius:0}
-.fix{display:grid;grid-template-columns:1fr auto 1fr;gap:6px;align-items:center}
+select{min-width:0;width:100%;font:500 13px var(--mono);padding:8px;border:1.5px solid var(--ink);background:#fff;color:var(--ink);border-radius:0}
+.fix{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:6px;align-items:center}
 .fix span{font:600 12px var(--mono);color:var(--ink-3)}
 .feedhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
 .feedhead .lab{margin:0}
 .tog{font:500 12px var(--mono);border:1.5px solid var(--ink);background:transparent;padding:5px 8px;cursor:pointer;color:var(--ink)}
 .tog[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
-ol.feed{list-style:none;margin:0;padding:0;max-height:300px;overflow:auto;border-top:1px solid var(--rule)}
+ol.feed{list-style:none;margin:0;padding:0;flex:1;min-height:0;overflow:auto;border-top:1px solid var(--rule)}
 ol.feed li{display:grid;grid-template-columns:38px 1fr;gap:6px;padding:7px 0;border-bottom:1px solid var(--rule);font-size:14px}
 ol.feed li b{font:600 12px/1.6 var(--mono);color:var(--accent)}
 ol.feed li.big{font-weight:700}
 ol.feed.off{opacity:.35}
-footer{margin-top:22px;color:var(--ink-3);font-size:13px;border-top:1px solid var(--rule);padding-top:10px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+footer{margin-top:8px;color:var(--ink-3);font-size:12px;border-top:1px solid var(--rule);padding-top:8px;display:flex;flex-direction:column;gap:4px}
 kbd{font:12px var(--mono);border:1px solid var(--rule);padding:1px 5px;background:#fff}
-@media (max-width:900px){
-  .grid{grid-template-columns:1fr}
-  .wrap{padding:12px 12px 32px}
-  header.mast h1{font-size:19px}
-  ol.feed{max-height:220px}
+@media (max-width:1100px){ .grid{grid-template-columns:minmax(0,1fr) 260px} }
+@media (max-width:820px), (orientation:portrait) and (max-width:1024px){
+  html,body{overflow-x:hidden;overflow-y:auto}
+  .wrap,.grid,section.main,aside.panel{max-width:100%;min-width:0}
+  .wrap{height:auto;display:block;padding:6px 6px 20px}
+  header.mast{margin-bottom:6px}
+  header.mast h1{font-size:17px}
+  header.mast p{display:none}
+  .grid{display:block}
+  .stage{height:64vh;height:64svh;flex:none}
+  aside.panel{margin-top:8px;overflow:visible}
+  .row.grow{min-height:0}
+  ol.feed{max-height:220px;flex:none}
+  .under{right:96px}
+  .hint{display:none}
+}
+@media (max-height:520px) and (orientation:landscape){
+  .wrap{padding:4px 6px 6px;gap:4px}
+  header.mast{display:none}
+  .wrap{grid-template-rows:minmax(0,1fr)}
+  .grid{grid-template-columns:minmax(0,1fr) 230px;gap:6px}
+  .hint{display:none}
+  aside.panel{padding:8px}
+  .row{margin-bottom:8px}
+  .seg button{font-size:12px;padding:7px 2px;min-height:32px}
 }
 @media (max-width:480px){
   .bug{font-size:11px;left:6px;top:6px}
   .bug div{padding:5px 6px}
-  .shot button{padding:9px 10px;font-size:12px}
+  .shot button{padding:8px 9px;font-size:12px}
 }
 </style>
 </head>
 <body>
 <div class="wrap">
   <header class="mast">
-    <h1>Recess Futsal <span>· School No. 12</span></h1>
-    <p id="tagline">Five-a-side on the edge of the void.</p>
+    <h1>课间五人制 <span>· 第十二小学</span></h1>
+    <p id="tagline">悬浮小岛边上的五人制足球</p>
   </header>
 
   <div class="grid">
-    <section>
+    <section class="main">
       <div class="stage" id="stage">
-        <canvas id="view" aria-label="Pixel-art futsal match on a floating school playground"></canvas>
+        <canvas id="view" aria-label="悬浮学校操场上的像素风五人制足球比赛"></canvas>
         <div class="bug" aria-live="off">
           <div id="bugH"><i id="sqH"></i>HOM</div>
           <div class="sc" id="bugS">0–0</div>
           <div id="bugA"><i id="sqA"></i>AWY</div>
-          <div class="clk" id="bugC">1H 00:00</div>
+          <div class="clk" id="bugC">上半 00:00</div>
         </div>
         <div class="toast" id="toast"></div>
+        <div class="under">
+          <div class="shot" role="group" aria-label="观众喊话">
+            <button class="prim" data-cmd="shoot">射门</button>
+            <button data-cmd="cross">横传</button>
+            <button data-cmd="long">长传</button>
+          </div>
+          <p class="hint" id="hint">点球场，标记下一脚传球的落点</p>
+        </div>
         <div class="rot">
-          <button id="rotL" title="Rotate 90° left (Q)" aria-label="Rotate left">⟲</button>
-          <button id="rotR" title="Rotate 90° right (E)" aria-label="Rotate right">⟳</button>
+          <button id="rotL" title="向左旋转 90°（Q）" aria-label="向左旋转">⟲</button>
+          <button id="rotR" title="向右旋转 90°（E）" aria-label="向右旋转">⟳</button>
         </div>
-      </div>
-      <div class="under">
-        <div class="shot" role="group" aria-label="Spectator calls">
-          <button class="prim" data-cmd="shoot">Shoot</button>
-          <button data-cmd="cross">Square ball</button>
-          <button data-cmd="long">Long ball</button>
-        </div>
-        <p class="hint" id="hint">Tap the court to mark where the next pass goes.</p>
       </div>
     </section>
 
     <aside class="panel">
       <div class="row">
-        <span class="lab">Fixture</span>
+        <span class="lab">对阵</span>
         <div class="fix">
-          <select id="selH" aria-label="Home club"></select><span>v</span><select id="selA" aria-label="Away club"></select>
+          <select id="selH" aria-label="主队"></select><span>对</span><select id="selA" aria-label="客队"></select>
         </div>
         <div class="sub" id="motto"></div>
       </div>
       <div class="row">
-        <span class="lab">Match length (real time per half)</span>
+        <span class="lab">比赛时长（每半场真实时间）</span>
         <div class="seg" id="segLen">
-          <button data-v="2">2 min</button><button data-v="4" aria-pressed="true">4 min</button><button data-v="8">8 min</button><button data-v="20">20 min</button>
+          <button data-v="2">2 分钟</button><button data-v="4" aria-pressed="true">4 分钟</button><button data-v="8">8 分钟</button><button data-v="20">20 分钟</button>
         </div>
       </div>
       <div class="row">
-        <span class="lab">Surface</span>
+        <span class="lab">场地</span>
         <div class="seg" id="segSurf">
-          <button data-v="rubber" aria-pressed="true">Rubber</button><button data-v="asphalt">Asphalt</button><button data-v="turf">Turf</button><button data-v="parquet">Parquet</button>
+          <button data-v="rubber" aria-pressed="true">橡胶</button><button data-v="asphalt">沥青</button><button data-v="turf">人造草</button><button data-v="parquet">木地板</button>
         </div>
         <div class="sub" id="surfNote"></div>
       </div>
       <div class="row">
-        <span class="lab">Light</span>
+        <span class="lab">光线</span>
         <div class="seg" id="segTime">
-          <button data-v="day" aria-pressed="true">Day</button><button data-v="dusk">Dusk</button><button data-v="night">Night</button>
+          <button data-v="day" aria-pressed="true">白天</button><button data-v="dusk">黄昏</button><button data-v="night">夜晚</button>
         </div>
       </div>
       <div class="row">
-        <span class="lab">View</span>
+        <span class="lab">视角</span>
         <div class="seg" id="segView">
-          <button data-v="tv" aria-pressed="true">TV</button><button data-v="full">Full pitch</button><button data-v="close">Close-up</button>
+          <button data-v="tv" aria-pressed="true">转播</button><button data-v="full">全景</button><button data-v="close">特写</button>
         </div>
       </div>
-      <div class="row">
-        <div class="feedhead"><span class="lab">Tannoy feed</span><button class="tog" id="togFeed" aria-pressed="true">On</button></div>
+      <div class="row grow">
+        <div class="feedhead"><span class="lab">场边广播</span><button class="tog" id="togFeed" aria-pressed="true">开</button></div>
         <ol class="feed" id="feed" aria-live="polite"></ol>
       </div>
+      <footer>
+        <span>用 <kbd>Q</kbd> <kbd>E</kbd> 或双指滑动旋转视角。球队和球员均为原创。</span>
+        <span>three.js r160 · 低分辨率渲染 · 深度描边 · 调色板量化</span>
+      </footer>
     </aside>
   </div>
 
-  <footer>
-    <span>Rotate with <kbd>Q</kbd> <kbd>E</kbd> or a two-finger swipe. Original clubs, original players, no real teams harmed.</span>
-    <span>three.js r160 · rendered at low resolution, outlined by depth, quantized to a palette</span>
-  </footer>
 </div>
 
 <script type="importmap">
@@ -164,14 +187,14 @@ import * as THREE from 'three';
    1. DATA: clubs, palettes, surfaces, commentary
    ========================================================================= */
 const TEAMS = [
-  { name:'Canteen Rovers', short:'CTR', shirt:'#ff5400', shorts:'#11141a', socks:'#ff5400', gk:'#00d9bb', motto:'Hot lunch, cold finishes.',
-    players:['Arlo Vance','Tariq Mansour','Mio Lindqvist','Kiki Okafor','Nico Chen','Samira Haddad','Jonas Ruiz','Elio Morata','Bram Veldkamp'] },
-  { name:'Chalkdust Utd', short:'CDU', shirt:'#8338ec', shorts:'#f4f6f8', socks:'#8338ec', gk:'#ffd100', motto:'Leave your mark on the blacktop.',
-    players:['Pascal Becker','Zayd Al-Masri','Soren Mikkelsen','Ananya Sen','Dante Cruz','Tobias Finch','Remy Fontaine','Ludo Bianchi','Malo Diallo'] },
-  { name:'Recess Rangers', short:'RCR', shirt:'#f4f6f8', shorts:'#d00036', socks:'#d00036', gk:'#70e000', motto:'Ten minutes of pure chaos.',
-    players:['Haruki Sato','Mateo Barbosa','Finn MacLeod','Leila Belkacem',"Callum O'Shea",'Iker Navarro','Idris Kamara','Bora Park','Emil Lindberg'] },
-  { name:'Backbench FC', short:'BBF', shirt:'#ffd100', shorts:'#023047', socks:'#023047', gk:'#ff007f', motto:'Quiet at the back, loud on the counter.',
-    players:['Otto Lindgren','Thiago Ramos','Kofi Appiah','Enzo Ferrara','Noam Peretz','Milan Varga','Felix Novak','Casimir Rey','Youssef Berrada'] },
+  { name:'食堂流浪者', short:'CTR', shirt:'#ff5400', shorts:'#11141a', socks:'#ff5400', gk:'#00d9bb', motto:'午饭要热，射门要冷。',
+    players:['林子航','唐一鸣','许墨','欧可可','陈尼可','韩思敏','罗嘉','莫言溪','范博'] },
+  { name:'粉笔灰联', short:'CDU', shirt:'#8338ec', shorts:'#f4f6f8', socks:'#8338ec', gk:'#ffd100', motto:'在柏油地上留下印记。',
+    players:['白帕斯','赵子钰','孙墨凯','沈安娜','杜丹','费托比','方雷米','卞路多','马洛'] },
+  { name:'课间游骑兵', short:'RCR', shirt:'#f4f6f8', shorts:'#d00036', socks:'#d00036', gk:'#70e000', motto:'十分钟，纯混乱。',
+    players:['佐藤春','巴马特','麦芬恩','贝蕾拉','欧凯伦','纳伊克','卡伊德','朴宝罗','林德埃'] },
+  { name:'后排FC', short:'BBF', shirt:'#ffd100', shorts:'#023047', socks:'#023047', gk:'#ff007f', motto:'后场安静，反击响亮。',
+    players:['林奥拓','拉蒂亚','阿科菲','费恩佐','裴诺安','瓦米兰','诺菲力','雷卡西','贝优素'] },
 ];
 const ROLES = ['GK','DEF','WING','WING','PIV','GK','DEF','WING','PIV'];
 
@@ -184,32 +207,32 @@ const SKY = { day:['#9cc9ea','#c5e3f6'], dusk:['#6c3f68','#ff9e79'], night:['#08
 
 // roll: rolling-resistance coefficient (decel = roll*g), e: bounce restitution, slide: how much speed survives a skid/bounce, grip: player traction
 const SURFACES = {
-  rubber:  { roll:0.045, e:0.55, slide:0.55, grip:1.00, note:'Municipal blue rubber. True roll, honest bounce.' },
-  asphalt: { roll:0.028, e:0.74, slide:0.45, grip:0.95, note:'Schoolyard asphalt. Quick, lively, unkind to knees.' },
-  turf:    { roll:0.130, e:0.12, slide:0.25, grip:1.05, note:'Patchy AstroTurf. The ball dies; the bounce never comes.' },
-  parquet: { roll:0.016, e:0.62, slide:0.92, grip:0.72, note:'Gymnasium parquet. Fastest and slipperiest of the four.' },
+  rubber:  { roll:0.045, e:0.55, slide:0.55, grip:1.00, note:'市政蓝色橡胶地。滚得正，弹得老实。' },
+  asphalt: { roll:0.028, e:0.74, slide:0.45, grip:0.95, note:'校园柏油地。球快、弹跳活，对膝盖不太友好。' },
+  turf:    { roll:0.130, e:0.12, slide:0.25, grip:1.05, note:'斑驳的人造草。球一落地就死，几乎不弹。' },
+  parquet: { roll:0.016, e:0.62, slide:0.92, grip:0.72, note:'体育馆木地板。四种场地里最快、最滑。' },
 };
 
 const LINES = {
-  kickoff:['The bell clangs above the porch, and {p} rolls the first touch for {t}.','{m}\u2032: {t} tap it into play. Here we go.','{p} nudges it forward and we are under way.','Whistle. {t} get us started.'],
-  pass:['{p} snaps a crisp ball down the touchline.','Quick sole-drag from {p}, feeding it to the flank.','{p} keeps it simple.','Neat one-two involving {p}.','{p} threads it through.','{p} switches the play.'],
-  shot:['{p} lets fly from distance!','A low toe-poke from {p}!','{p} shoots!','{p} takes aim\u2026','Snapshot from {p}!'],
-  save:['{p} reacts and palms it away!','Sprawled across the deck, {p} claws it out!','Big hands from {p}.','{p} gathers it, no fuss.','Smart stop by {p}.'],
-  goal:['GOAL! {p} buries it! {s}.','INTO THE ROOF OF THE NET! {p} strikes for {t}! {s}.','{p} scores! The porch is bouncing. {s}.','GOAL for {t}! {p} with the finish. {s}.'],
-  miss:['{p} blazes it over the fence. That one is off the island.','Wide from {p}.','{p} drags it past the post.','Off the stanchion and out. {p} holds his head.'],
-  post:['Off the post! {p} so close.','Woodwork! {p} rattles the frame.'],
-  corner:['Corner to {t}. {p} places it on the arc.','{p} signals for the routine.','Corner, {t}.'],
-  kickin:['Kick-in. {p} sets it on the line.','{p} goes short from the kick-in.','Ball on the line for {t}.'],
-  foul:['Whistle. {p} clipped late.','Clumsy from {p}. Free kick.','Foul by {p}. That is {f} for {t} this half.'],
-  pen10:['Sixth team foul! Free shot from the second mark for {t}.','Accumulated fouls punish {t}. Ten-metre kick coming.'],
-  goalclear:['{p} rolls it out from the area.','Goal clearance. {p} starts again.'],
-  halftime:['Half-time. School No. 12 catches its breath at {s}.','The buzzer blares across the island. Teams head for the porch at {s}.'],
-  fulltime:['FULL-TIME at School No. 12. Final score: {s}.','The siren sounds. A playground classic finishes {s}.'],
-  walkout:['Teams emerge from the porch of School No. 12.','Out through the gate they come. Parents reach for phones.'],
-  warmup:['{t} test the bounce on the rubber.','Shuttle runs under the floodlights for {t}.'],
-  celebration:['{p} slides knees-first toward the corner!','The whole {t} bench spills onto the court!'],
-  handshake:['Both fives meet at the halfway line for fist-bumps.','Handshakes all round. Somebody asks for the ball back.'],
-  second:['Second half. {t} get it going.','Back out they come. {t} kick off the second half.'],
+  kickoff:['门廊上的铃声响了，{p}为{t}开出第一脚。','第{m}分钟：{t}开球，比赛开始！','{p}轻轻一拨，比赛开始。','哨响，{t}开球。'],
+  pass:['{p}沿边线送出一脚干净的传球。','{p}脚底一拉，把球分到边路。','{p}处理得很简洁。','{p}参与了一次漂亮的撞墙配合。','{p}一脚直塞！','{p}大范围转移。'],
+  shot:['{p}远射！','{p}贴地捅射！','{p}起脚！','{p}瞄准了……','{p}抢点打门！'],
+  save:['{p}反应神速，把球拍了出去！','{p}飞身扑救，把球挡出！','{p}一双大手稳稳的。','{p}轻松抱住。','{p}漂亮的扑救。'],
+  goal:['球进了！{p}一蹴而就！{s}。','直挂死角！{p}为{t}破门！{s}。','{p}进球！整个门廊都在跳！{s}。','{t}进球！{p}完成终结。{s}。'],
+  miss:['{p}一脚打飞到围栏外，这球飞出小岛了。','{p}射偏了。','{p}擦着门柱偏出。','打在支架上弹出。{p}抱头懊恼。'],
+  post:['击中门柱！{p}差一点！','门框！{p}打得球门直颤。'],
+  corner:['{t}获得角球，{p}把球摆在角球弧。','{p}示意打战术角球。','角球，{t}。'],
+  kickin:['界外球。{p}把球放在边线上。','{p}界外球短传。','边线球，{t}。'],
+  foul:['哨响，{p}铲晚了。','{p}动作太粗，任意球。','{p}犯规。{t}本半场已累计{f}次。'],
+  pen10:['第六次全队犯规！{t}获得第二罚球点直接任意球。','累计犯规惩罚{t}，十米球来了。'],
+  goalclear:['{p}从禁区里把球抛出。','球门球，{p}重新组织。'],
+  halftime:['中场休息。第十二小学喘口气，比分{s}。','蜂鸣器响彻小岛，两队以{s}回到门廊。'],
+  fulltime:['第十二小学比赛结束，最终比分：{s}。','终场汽笛响起，一场操场经典以{s}收官。'],
+  walkout:['两队从第十二小学的门廊走出。','球员们穿过大门入场，家长们掏出了手机。'],
+  warmup:['{t}在场上试试球的弹性。','{t}在灯光下做折返跑。'],
+  celebration:['{p}跪地滑向角旗！','{t}的替补席全冲进了场！'],
+  handshake:['两队在中线碰拳致意。','握手致意。有人在问能不能把球还给他。'],
+  second:['下半场开始，{t}开球。','两队回到场上，{t}开出下半场。'],
 };
 
 /* =========================================================================
@@ -559,8 +582,8 @@ stand(16.2, 0, 22, false, [-1,0]);
   const head = new THREE.InstancedMesh(new THREE.BoxGeometry(0.3,0.3,0.3), new THREE.MeshLambertMaterial(), n);
   const shirts = ['#cf5c42','#ffd100','#f4f6f8','#388e5a','#5b9bd5','#ff5400','#8338ec','#d00036','#232733','#90a955','#c8d1d3'];
   const skins = ['#fed0bb','#e2a882','#c68642','#8c522f','#5c3826'];
-  crowdSpots.forEach((s,i)=>{ s.kid = rnd()<0.55; s.sc = s.kid?0.75:1.05; s.ph = rnd()*7; s.jump=0;
-    body.setColorAt(i, col(shirts[Math.floor(rnd()*shirts.length)])); head.setColorAt(i, col(skins[Math.floor(rnd()*skins.length)])); });
+  crowdSpots.forEach((s,i)=>{ s.kid = rnd()<0.55; s.sc = s.kid?0.75:1.05; s.ph = rnd()*7; s.jump=0; s.shirt = shirts[Math.floor(rnd()*shirts.length)];
+    body.setColorAt(i, col(s.shirt)); head.setColorAt(i, col(skins[Math.floor(rnd()*skins.length)])); });
   body.castShadow = head.castShadow = true;
   scene.add(body, head);
   world.crowd = { body, head, spots:crowdSpots, excite:0 };
@@ -664,7 +687,8 @@ function animatePerson(P, speed, dt, pose=null){
   if(pose==='sit'){ P.legL.rotation.x=P.legR.rotation.x=-1.5; P.g.position.y=-0.3; P.armL.rotation.x=P.armR.rotation.x=-0.3; }
   if(pose==='wave'){ P.armR.rotation.z = 2.6 + Math.sin(P.phase*3)*0.3; }
   if(pose==='crouch'){ P.legL.rotation.x=P.legR.rotation.x=-0.9; P.g.position.y=-0.22; P.armL.rotation.x=P.armR.rotation.x=-1.2; }
-  if(pose==='dive'){ /* handled via g rotation */ }
+  if(pose==='slide'){ P.legL.rotation.x=P.legR.rotation.x=1.45; P.g.position.y=-0.34; P.armL.rotation.z=-1.5; P.armR.rotation.z=1.5; P.armL.rotation.x=P.armR.rotation.x=-0.4; }
+  if(pose==='dive'){ P.armL.rotation.z=-2.9; P.armR.rotation.z=2.9; P.armL.rotation.x=P.armR.rotation.x=0; P.legL.rotation.x=0.25; P.legR.rotation.x=-0.25; P.g.position.y=0.12; }
 }
 
 /* =========================================================================
@@ -1136,15 +1160,20 @@ function resolveShot(){
     const off = Math.abs(ball.p.x - gk.p.x), sp = ball.v.length();
     const onTarget = Math.abs(ball.p.x + ball.v.x*(distToLine/Math.max(Math.abs(ball.v.z),1)))<1.55 && ball.p.y<2.05;
     if(!onTarget) return;
-    const p = clamp(0.82 - off*0.55 - Math.max(0,sp-14)*0.045 - (ball.p.y>1.3?0.15:0), 0.05, 0.8);
-    if(Math.random() < p){
-      say('save',{p:gk}); gk.dive = 0.5*Math.sign(ball.p.x-gk.p.x||1);
+    const p0 = clamp(0.82 - off*0.55 - Math.max(0,sp-14)*0.045 - (ball.p.y>1.3?0.15:0), 0.05, 0.8), p=p0, roll=Math.random();
+    if(roll >= p && off > 0.6 && Math.random()<0.75) startDive(gk, ball.p.x, off);
+    if(roll < p){
+      say('save',{p:gk}); startDive(gk, ball.p.x, off);
       if(sp < 17 && ball.p.y < 1.5){ gk.cool=0; gainBall(gk); ball.held=true; }
       else { const behind = Math.random()<0.5; ball.v.set(Math.sign(ball.p.x-gk.p.x||1)*rr(3,7), rr(1,3), behind ? Math.sign(gz)*rr(2,5) : -Math.sign(gz)*rr(1,5)); ball.lastTouch = t; ball.shot=null; } // half the parries are tipped round for a corner
     }
   }
 }
 
+function startDive(gk, bx, off){
+  if(off < 0.35) return;                                   // straight at him: just catches it
+  gk.diveT = 0.85; gk.diveDur = 0.85; gk.diveSide = Math.sign(bx-gk.p.x||1); gk.diveReach = clamp(off,0.6,1.6);
+}
 function foul(by, victim){
   const t = victim.team; S.fouls[by.team]++;
   say('foul',{p:by, t:by.team, f:S.fouls[by.team]});
@@ -1238,22 +1267,37 @@ function goalScored(team){
   const scorer = ball.lastKicker && ball.lastKicker.team===team ? ball.lastKicker : nearestTo(onPitch(team), ball.p);
   say('goal',{p:scorer,t:team},true);
   whistle(); world.crowd.excite = 4;
-  S.phase = 'celebrate'; S.celebrate = { team, scorer, t:0 }; ball.shot=null; ball.pass=null;
+  S.phase = 'celebrate'; S.celebrate = { team, scorer, t:0, slide:0, slid:false, pulse:[], pulseOn:false, pulseT:0 }; ball.shot=null; ball.pass=null;
+  for(const pl of squads[team]) if(!pl.onPitch && pl.pose==='sit'){ pl.pose='cheer'; pl.benchCheer=true; }   // bench jumps up
+  world.crowd.spots.forEach((sp,i)=>{ if(Math.random()<0.35) S.celebrate.pulse.push(i); });                       // fans in the scorer's colours
   if(Math.random()<0.6) setTimeout(()=>say('celebration',{p:scorer,t:team}), 1200);
   if(extras.photo) extras.photo.flash = 1.2;
 }
+function crowdPaint(idx, on, hex){
+  const B = world.crowd.body; if(!B.setColorAt) return;
+  for(const i of idx) B.setColorAt(i, col(on ? hex : world.crowd.spots[i].shirt));
+  if(B.instanceColor) B.instanceColor.needsUpdate = true;
+}
 function updateCelebrate(dt){
   const C = S.celebrate; C.t += dt; stepBall(dt);
+  C.pulseT -= dt; if(C.pulseT<=0 && C.t<5.6){ C.pulseT=0.33; C.pulseOn=!C.pulseOn; crowdPaint(C.pulse, C.pulseOn, S.teams[C.team].shirt); }
   const corner = V3(Math.sign(C.scorer.p.x||1)*9.2, 0, -S.dir[1-C.team]*19.2 * -1);
   const cz = oppGoal(C.team).z; corner.z = cz - Math.sign(cz)*0.8;
   for(const t of [0,1]) for(const pl of onPitch(t)){
     let target, urg=0.7;
-    if(t===C.team && pl.role!=='GK'){ target = pl===C.scorer ? corner : V3(corner.x - Math.sign(corner.x)*rr(0.5,1.5), 0, corner.z - Math.sign(corner.z)*rr(0.5,2)); urg = 0.95; pl.pose = C.t>1.2?'cheer':null; }
+    if(pl===C.scorer){
+      if(!C.slid && C.t>0.4 && (pl.p.distanceTo(corner)<5 || C.t>2.6)){ C.slid=true; C.slide=0.95; pl.pose='slide'; }
+      if(C.slide>0){ C.slide-=dt; pl.v.multiplyScalar(Math.max(0,1-dt*1.6)); pl.p.addScaledVector(pl.v, dt); if(C.slide<=0) pl.pose='cheer'; continue; }
+      if(C.slid) pl.pose='cheer';
+    }
+    if(t===C.team && pl.role!=='GK'){ target = pl===C.scorer ? corner : V3(corner.x - Math.sign(corner.x)*rr(0.5,1.5), 0, corner.z - Math.sign(corner.z)*rr(0.5,2)); urg = 0.95; if(pl!==C.scorer) pl.pose = C.t>1.2?'cheer':null; }
     else target = formationSpot(pl, false);
     steer(pl, target, dt, urg);
     pl.face = Math.atan2(pl.v.x||0.01, pl.v.z||0.01);
   }
-  if(C.t > 5){ for(const pl of onPitch(C.team)) pl.pose=null; startRestart('kickoff', 1-C.team, V3(0,BALL_R,0)); }
+  if(C.t > 6){ for(const pl of onPitch(C.team)) pl.pose=null;
+    for(const pl of squads[C.team]) if(pl.benchCheer){ pl.pose='sit'; pl.benchCheer=false; }
+    crowdPaint(C.pulse, false); startRestart('kickoff', 1-C.team, V3(0,BALL_R,0)); }
 }
 
 function whistle(){ S.whistle = 0.6; if(officials.ref) officials.ref.whistle = 0.6; }
@@ -1490,14 +1534,14 @@ function seg(id, fn){
   const el=$(id);
   el.addEventListener('click', e=>{ const b=e.target.closest('button'); if(!b) return; el.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed', x===b?'true':'false')); fn(b.dataset.v); });
 }
-seg('segLen', v=>{ S.realMin=+v; S.halfLen=1200; toast(`${v} real minutes a half`); });
-seg('segSurf', v=>{ setSurface(v); toast(v[0].toUpperCase()+v.slice(1)); });
+seg('segLen', v=>{ S.realMin=+v; S.halfLen=1200; toast(`每半场 ${v} 分钟`); });
+seg('segSurf', v=>{ setSurface(v); toast({rubber:'橡胶',asphalt:'沥青',turf:'人造草',parquet:'木地板'}[v]); });
 seg('segTime', v=>setTime(v));
 seg('segView', v=>{ S.view=v; });
-$('togFeed').addEventListener('click', e=>{ S.feedOn=!S.feedOn; e.currentTarget.setAttribute('aria-pressed', S.feedOn); e.currentTarget.textContent=S.feedOn?'On':'Off'; $('feed').classList.toggle('off', !S.feedOn); });
+$('togFeed').addEventListener('click', e=>{ S.feedOn=!S.feedOn; e.currentTarget.setAttribute('aria-pressed', S.feedOn); e.currentTarget.textContent=S.feedOn?'开':'关'; $('feed').classList.toggle('off', !S.feedOn); });
 $('rotL').onclick = ()=>rotate(-1); $('rotR').onclick = ()=>rotate(1);
 window.addEventListener('keydown', e=>{ if(e.target.tagName==='SELECT') return; if(e.key==='q'||e.key==='Q') rotate(-1); if(e.key==='e'||e.key==='E') rotate(1); });
-document.querySelectorAll('[data-cmd]').forEach(b=>b.addEventListener('click',()=>{ S.cmd=b.dataset.cmd; toast(`Called: ${b.textContent}`); }));
+document.querySelectorAll('[data-cmd]').forEach(b=>b.addEventListener('click',()=>{ S.cmd=b.dataset.cmd; toast(`已喊：${b.textContent}`); }));
 for(const id of ['selH','selA']){ const s=$(id); TEAMS.forEach((t,i)=>{ const o=document.createElement('option'); o.value=i; o.textContent=t.name; s.appendChild(o); }); }
 $('selH').value=0; $('selA').value=1;
 function onFixtureChange(){ let h=+$('selH').value, a=+$('selA').value; if(h===a){ a=(h+1)%4; $('selA').value=a; } startMatch(h,a); }
@@ -1519,23 +1563,23 @@ canvas.addEventListener('pointerup', e=>{
     const r = canvas.getBoundingClientRect();
     const ndc = new THREE.Vector2(((e.clientX-r.left)/r.width)*2-1, -((e.clientY-r.top)/r.height)*2+1);
     ray.setFromCamera(ndc, camera); const hit = V3(); if(ray.ray.intersectPlane(plane, hit)){
-      if(Math.abs(hit.x)<=PITCH.hx && Math.abs(hit.z)<=PITCH.hz){ S.marker={p:V3(hit.x,0,hit.z)}; markerMesh.position.set(hit.x,0.1,hit.z); markerMesh.visible=true; toast('Next pass goes there'); }
+      if(Math.abs(hit.x)<=PITCH.hx && Math.abs(hit.z)<=PITCH.hz){ S.marker={p:V3(hit.x,0,hit.z)}; markerMesh.position.set(hit.x,0.1,hit.z); markerMesh.visible=true; toast('下一脚传到这里'); }
     }
   }
   down=null;
 });
 
 function resize(){
-  const w = stage.clientWidth; const mob = w < 560;
-  const aspect = mob ? 4/3.4 : 16/10;
-  RH = mob ? 230 : w < 900 ? 260 : 300;
+  const w = Math.max(160, stage.clientWidth), h = Math.max(120, stage.clientHeight);
+  const aspect = clamp(w/h, 0.5, 3.2);
+  RH = Math.round(clamp(h/2.8, 170, 320));
   RW = Math.round(RH*aspect);
   renderer.setSize(RW, RH, false);
   rt.setSize(RW, RH);
   post.uniforms.res.value.set(RW,RH);
-  canvas.style.aspectRatio = `${RW}/${RH}`;
 }
 window.addEventListener('resize', resize);
+if(window.ResizeObserver) new ResizeObserver(()=>resize()).observe(stage);
 
 /* =========================================================================
    16. MATCH SETUP + LOOP
@@ -1546,12 +1590,12 @@ function updateBug(){
   $('sqH').style.background=T[0].shirt; $('sqA').style.background=T[1].shirt;
   $('bugS').textContent = `${S.score[0]}–${S.score[1]}`;
   const m=Math.floor(S.clock/60), s=Math.floor(S.clock%60);
-  const lab = S.phase==='pre'?'PRE':S.phase==='half'?'HT':S.phase==='full'?'FT':(S.half===1?'1H':'2H');
+  const lab = S.phase==='pre'?'赛前':S.phase==='half'?'中场':S.phase==='full'?'完场':(S.half===1?'上半':'下半');
   $('bugC').textContent = `${lab} ${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
 }
 function startMatch(h,a){
   S.teams=[TEAMS[h],TEAMS[a]]; S.matchNo++;
-  $('motto').textContent = `${TEAMS[h].name}: “${TEAMS[h].motto}”  ${TEAMS[a].name}: “${TEAMS[a].motto}”`;
+  $('motto').textContent = `${TEAMS[h].name}：“${TEAMS[h].motto}” ${TEAMS[a].name}：“${TEAMS[a].motto}”`;
   buildSquads(); setPalette(S.timeOfDay, S.teams);
   $('feed').innerHTML='';
   officials.ref.co=null; officials.ref.place(-10.8,0);
@@ -1588,8 +1632,15 @@ function tick(dt){
     if(!a.visible) continue;
     a.P.g.position.x = a.p.x; a.P.g.position.z = a.p.z;
     let cur = a.P.g.rotation.y, d = a.face - cur; d = Math.atan2(Math.sin(d),Math.cos(d)); a.P.g.rotation.y = cur + d*Math.min(1, dt*12);
-    animatePerson(a.P, Math.hypot(a.v.x,a.v.z), dt, a.pose);
-    if(a.dive){ a.P.g.rotation.z = a.dive*2.2; a.dive *= 0.9; if(Math.abs(a.dive)<0.02){ a.dive=0; a.P.g.rotation.z=0; } }
+    if(a.diveT>0){
+      a.diveT -= dt; const k = 1 - Math.max(0,a.diveT)/a.diveDur;
+      const e = k<0.3 ? k/0.3 : k<0.75 ? 1 : 1-(k-0.75)/0.25;          // spring out, lie, get up
+      animatePerson(a.P, 0, dt, 'dive');
+      a.P.g.rotation.z = -a.diveSide*1.35*e*Math.cos(a.P.g.rotation.y);
+      a.P.g.position.x += a.diveSide*a.diveReach*e;
+      a.P.g.position.y = 0.12*e + Math.sin(Math.min(1,k/0.3)*Math.PI)*0.35;
+      if(a.diveT<=0){ a.P.g.rotation.z = 0; }
+    } else animatePerson(a.P, Math.hypot(a.v.x,a.v.z), dt, a.pose);
   }
   // ball
   ballMesh.position.copy(ball.p); ballMesh.position.y = Math.max(ball.p.y, BALL_R*1.2) + 0.03;
@@ -1637,7 +1688,7 @@ setSurface('rubber');
 setTime('day');
 startMatch(0,1);
 const errors=[]; window.addEventListener('error',e=>errors.push(String(e.message)));
-window.__futsal = { S, ball, squads, SURFACES, setSurface, setTime, rotate, astar, solveRoll, solveLob, errors, camState,
+window.__futsal = { S, ball, squads, startDive, goalScored, gkOf, updateCelebrate, SURFACES, setSurface, setTime, rotate, astar, solveRoll, solveLob, errors, camState,
   sim(sec, dt=1/30){ const t0=performance.now(); try{ for(let t=0;t<sec;t+=dt) tick(dt); }catch(e){ errors.push(e.stack||String(e)); } return performance.now()-t0; },
   snap(settle=0.6){ for(let i=0;i<Math.ceil(settle/0.05);i++) updateCamera(0.05); draw(0); return canvas.toDataURL('image/png'); } };
 requestAnimationFrame(frame);
